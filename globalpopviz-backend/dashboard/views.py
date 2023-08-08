@@ -7,9 +7,9 @@ from django.shortcuts import render
 @require_GET
 def global_population(request):
     try:
-        year = request.GET.get('year', 2022)  # get the year from the request query parameters (default to 2022)
-        total_population = PopulationGrowthTotal.objects.filter(year=year).aggregate(total_population=Sum('population'))['total_population']
-        return JsonResponse({'global_population': total_population})
+        year = request.GET.get('year', 2022)
+        population_data = PopulationGrowthTotal.objects.filter(year=year).values('country__name', 'population')
+        return JsonResponse({'population_data': list(population_data)})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
