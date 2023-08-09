@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .models import Country, PopulationGrowthTotal, PopulationGrowthPercent
-from django.db.models import Sum
 from django.shortcuts import render
+from django.db.models import F
 
 @require_GET
 def global_population(request):
@@ -37,3 +37,26 @@ def population_growth(request, country_name):
     
 def dashboard(request):
     return render(request, 'dashboard.html')
+
+@require_GET
+def population_graph_data(request):
+    data_type = request.GET.get('dataType', 'totalPopulation')
+    country_name = request.GET.get('countryName')  
+
+    if data_type == 'totalPopulation':
+        if country_name:
+            data = PopulationGrowthTotal.objects.filter(country__name=country_name).order_by('year')
+        else:
+            data = PopulationGrowthTotal.objects.all().order_by('year')
+    elif data_type == 'percentGrowth':
+        if country_name:
+            data = PopulationGrowthPercent.objects.filter(country__name=country_name).order_by('year')
+        else:
+            data = PopulationGrowthPercent.objects.all().order_by('year')
+    else:
+        return JsonResponse({'error': 'Invalid data type'}, status=400)
+
+    labels = [entry.year for entry in data]
+    values = [entry.population if data_type == 'totalPopulation' else entry.percent_change for entry in data]
+
+    return JsonResponse({'labels': labels, 'values': values})
