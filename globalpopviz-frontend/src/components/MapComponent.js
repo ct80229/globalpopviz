@@ -59,7 +59,6 @@ const MapComponent = () => {
           {({ geographies }) =>
             geographies.map((geo) => {
               const countryData = populationData.find((data) => data.country__name === geo.properties.ADMIN);
-
               if (countryData) {
                 const population = countryData.population;
 

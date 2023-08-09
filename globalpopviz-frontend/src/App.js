@@ -14,16 +14,19 @@ const App = () => {
         {/* set container */}
         <Container>
           {/* dashboard header */}
-          <Typography variant="h1">Dashboard</Typography>
+          <Typography variant="h1">Population Visualizer</Typography>
 
           {/* map component beneath header */}
           <MapComponent />
 
           {/* population component */}
-          <PopulationComponent />
+          <Typography variant="h3" style={{ fontSize: '30px' }}>
+            <PopulationComponent />
+          </Typography>
 
           {/* line graph of pop changes */}
           <LineGraphComponent />
+          <Typography variant="h3">World Population Change from 1960-2022</Typography>
 
           {/* pie chart of pop proportions */}
           <PieChartComponent />
