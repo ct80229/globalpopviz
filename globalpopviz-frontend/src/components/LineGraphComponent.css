@@ -1,0 +1,21 @@
+.line-graph-component {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Add this line to center the text within LineGraphComponent */
+  }
+  
+  .toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  

@@ -2,7 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Line } from 'react-chartjs-2';
 import axios from 'axios';
 import { CategoryScale, Chart, LineElement, LinearScale, PointElement} from "chart.js";
+import './LineGraphComponent.css';
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
+
 
 //set up line graph
 const LineGraphComponent = () => {
@@ -62,7 +64,7 @@ const LineGraphComponent = () => {
     fetchData(); 
   }, [searchCountry, selectedDataType, fetchData]);
 
-  return (
+    return (
     <div className="line-graph-component">
       <div className="toggle-container">
         <label>
@@ -84,14 +86,16 @@ const LineGraphComponent = () => {
           Percent Growth
         </label>
       </div>
-      <input
-        type="text"
-        placeholder="Search for a country..."
-        value={searchCountry}
-        onChange={(e) => setSearchCountry(e.target.value)}
-      />
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search for a country..."
+          value={searchCountry}
+          onChange={(e) => setSearchCountry(e.target.value)}
+        />
+      </div>
       <Line data={chartData} />
-    </div>
+    </div>  
   );
 };
 

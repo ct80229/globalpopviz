@@ -4,6 +4,7 @@ import axios from 'axios';
 import { scaleLinear } from 'd3-scale';
 import { interpolateBlues } from 'd3-scale-chromatic';
 import Slider from '@mui/material/Slider';
+import { useNavigate } from 'react-router-dom';
 
 
 //set up map element, use reactsimplemaps
@@ -12,6 +13,7 @@ const MapComponent = () => {
   const [minPopulation, setMinPopulation] = useState(0);
   const [maxPopulation, setMaxPopulation] = useState(0);
   const [selectedYear, setSelectedYear] = useState(2022);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGlobalPopulation = async (year) => {
@@ -66,9 +68,12 @@ const MapComponent = () => {
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
+                    onClick={() => {
+                      navigate(`/country/${geo.properties.ADMIN}`); // Navigate to the new page
+                    }}
                     style={{
                       default: {
-                        fill: population ? colorScale(population) : '#F5F4F6', // Apply color based on population data
+                        fill: population ? colorScale(population) : '#F5F4F6',
                         outline: 'none',
                       },
                       hover: {
@@ -100,7 +105,7 @@ const MapComponent = () => {
           onChange={(event, value) => setSelectedYear(value)}
           aria-labelledby="year-slider"
         />
-        <span>{selectedYear}</span> {/* Display the selected year */}
+        <span>{selectedYear}</span> {/* display the selected year */}
       </div>
     </div>
   );
