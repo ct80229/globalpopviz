@@ -6,6 +6,7 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
 //set up line graph
 const LineGraphComponent = () => {
+  const [selectedDataType, setSelectedDataType] = useState('totalPopulation')
   const [searchCountry, setSearchCountry] = useState('');
   const [chartData, setChartData] = useState({
     labels: [],
@@ -26,14 +27,14 @@ const LineGraphComponent = () => {
       if (searchCountry) {
         response = await axios.get('http://localhost:8000/api/population-graph/', {
           params: {
-            dataType: 'totalPopulation',
+            dataType: selectedDataType,
             countryName: searchCountry,
           },
         });
       } else {
         response = await axios.get('http://localhost:8000/api/population-graph/', {
           params: {
-            dataType: 'totalPopulation',
+            dataType: selectedDataType,
             countryName: 'World', // placeholder for global data
           },
         });
@@ -55,14 +56,34 @@ const LineGraphComponent = () => {
     } catch (error) {
       console.error('Error fetching population graph data:', error);
     }
-  }, [searchCountry]);
+  }, [searchCountry, selectedDataType]);
 
   useEffect(() => {
-    fetchData(); // Now using the useCallback version
-  }, [searchCountry, fetchData]);
+    fetchData(); 
+  }, [searchCountry, selectedDataType, fetchData]);
 
   return (
     <div className="line-graph-component">
+      <div className="toggle-container">
+        <label>
+          <input
+            type="radio"
+            value="totalPopulation"
+            checked={selectedDataType === 'totalPopulation'}
+            onChange={() => setSelectedDataType('totalPopulation')}
+          />
+          Total Population
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="percentGrowth"
+            checked={selectedDataType === 'percentGrowth'}
+            onChange={() => setSelectedDataType('percentGrowth')}
+          />
+          Percent Growth
+        </label>
+      </div>
       <input
         type="text"
         placeholder="Search for a country..."
