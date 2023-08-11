@@ -22,30 +22,21 @@ const LineGraphComponent = ({ searchCountry, showSearchBar }) => {
   });
 
   // define fetchData using useCallback
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (countryName) => {
     try {
       let response;
-      let countryParam = searchCountry;
+      let countryParam = countryName;
 
-      if (!searchCountry) {
+      if (!countryName) {
         countryParam = 'World'; // set default for global data
       }
 
-      if (searchCountry) {
-        response = await axios.get('http://localhost:8000/api/population-graph/', {
-          params: {
-            dataType: selectedDataType,
-            countryName: countryParam,
-          },
-        });
-      } else {
-        response = await axios.get('http://localhost:8000/api/population-graph/', {
-          params: {
-            dataType: selectedDataType,
-            countryName: 'World', // placeholder for global data
-          },
-        });
-      }
+      response = await axios.get('http://localhost:8000/api/population-graph/', {
+        params: {
+          dataType: selectedDataType,
+          countryName: countryParam,
+        },
+      });
 
       const { labels, values } = response.data;
 
@@ -55,7 +46,7 @@ const LineGraphComponent = ({ searchCountry, showSearchBar }) => {
         datasets: [
           {
             ...prevChartData.datasets[0],
-            label: searchCountry ? `Population of ${searchCountry}` : 'World Population',
+            label: countryName ? `Population of ${countryName}` : 'World Population',
             data: values,
           },
         ],
@@ -63,16 +54,16 @@ const LineGraphComponent = ({ searchCountry, showSearchBar }) => {
     } catch (error) {
       console.error('Error fetching population graph data:', error);
     }
-  }, [searchCountry, selectedDataType]);
+  }, [selectedDataType]);
 
   useEffect(() => {
-    fetchData(); 
+    fetchData(searchCountry); 
   }, [searchCountry, selectedDataType, fetchData]);
 
   const setSearchCountry = (value) => {
     if (showSearchBar) {
       // only set searchCountry if showSearchBar is true
-      setSearchCountry(value);
+      fetchData(value); 
     }
   };
 

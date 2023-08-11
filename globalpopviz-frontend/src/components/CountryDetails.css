@@ -1,0 +1,12 @@
+.country-details-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    min-height: 100vh; 
+  }
+  
+  .country-details {
+    text-align: center;
+  }
+

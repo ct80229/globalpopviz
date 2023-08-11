@@ -4,8 +4,6 @@ import { Container, Typography, Grid } from '@mui/material';
 import MapComponent from './components/MapComponent';
 import PopulationComponent from './components/PopulationComponent';
 import LineGraphComponent from './components/LineGraphComponent';
-import PieChartComponent from './components/PieChartComponent';
-import CountryDetails from './components/CountryDetails';
 
 const MainLayout = () => {
   return (
@@ -29,9 +27,6 @@ const MainLayout = () => {
             <Typography variant="h3" align="center" style={{ margin: '20px 0' }}>
               Population Change from 1960-2022
             </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <PieChartComponent />
           </Grid>
         </Grid>
         {/* render nested routes */}
