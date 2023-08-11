@@ -7,9 +7,8 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
 
 //set up line graph
-const LineGraphComponent = () => {
-  const [selectedDataType, setSelectedDataType] = useState('totalPopulation')
-  const [searchCountry, setSearchCountry] = useState('');
+const LineGraphComponent = ({ searchCountry, showSearchBar }) => {
+  const [selectedDataType, setSelectedDataType] = useState('totalPopulation');
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -22,15 +21,21 @@ const LineGraphComponent = () => {
     ],
   });
 
-  // Define fetchData using useCallback
+  // define fetchData using useCallback
   const fetchData = useCallback(async () => {
     try {
       let response;
+      let countryParam = searchCountry;
+
+      if (!searchCountry) {
+        countryParam = 'World'; // set default for global data
+      }
+
       if (searchCountry) {
         response = await axios.get('http://localhost:8000/api/population-graph/', {
           params: {
             dataType: selectedDataType,
-            countryName: searchCountry,
+            countryName: countryParam,
           },
         });
       } else {
@@ -64,6 +69,13 @@ const LineGraphComponent = () => {
     fetchData(); 
   }, [searchCountry, selectedDataType, fetchData]);
 
+  const setSearchCountry = (value) => {
+    if (showSearchBar) {
+      // only set searchCountry if showSearchBar is true
+      setSearchCountry(value);
+    }
+  };
+
     return (
     <div className="line-graph-component">
       <div className="toggle-container">
@@ -86,6 +98,7 @@ const LineGraphComponent = () => {
           Percent Growth
         </label>
       </div>
+      {showSearchBar && (
       <div className="search-container">
         <input
           type="text"
@@ -94,9 +107,13 @@ const LineGraphComponent = () => {
           onChange={(e) => setSearchCountry(e.target.value)}
         />
       </div>
+      )}
       <Line data={chartData} />
     </div>  
   );
 };
 
+LineGraphComponent.defaultProps = {
+  showSearchBar: true, 
+};
 export default LineGraphComponent;
